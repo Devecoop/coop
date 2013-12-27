@@ -22,11 +22,11 @@ import os
 import shutil
 import unittest
 
-from coop.lib.command_discoverer import discover_commands
-from coop.lib.constants import COOP_COMAND_PATH
+from coop.lib.command_discoverer import discover_commands, import_command
+from coop.lib.constants import COOP_COMMAND_PATH
 
-CURRENT_PATH = os.path.abspath(__file__).partition(__file__)[0]
-COOP_TEST_COMMAND_PATH = os.path.join(CURRENT_PATH, COOP_COMAND_PATH)
+CURRENT_PATH = os.path.abspath(__file__).partition(os.path.basename((__file__)))[0]
+COOP_TEST_COMMAND_PATH = os.path.join(CURRENT_PATH, COOP_COMMAND_PATH)
 DUMMY_COMMAND_1 = 'dummy1'
 DUMMY_COMMAND_2 = 'dummy2'
 DUMMY_COMMAND_3 = 'dummy3'
@@ -45,9 +45,32 @@ DUMMY_COMMAND_3_PATH = os.path.join(COOP_TEST_COMMAND_PATH,
 DUMMY_COMMAND_WRONG_4_PATH = os.path.join(COOP_TEST_COMMAND_PATH,
                                     DUMMY_COMMAND_3 + COMMAND_EXTENSION_WRONG_SUFFIX)
 
+TEST_COMMAND = """
+class TestCommand(object):
+    def handle(self):
+        return True
+"""
 
 
-class TestCommandDiscover(unittest.TestCase):
+class TestRegisterCommand(unittest.TestCase):
+    def test_given_valid_command_when_calling_register_command_return_imported_module(self):
+        try:
+            if not os.path.exists(COOP_TEST_COMMAND_PATH):
+                os.mkdir(COOP_TEST_COMMAND_PATH)
+            fp1 = open(DUMMY_COMMAND_1_PATH, "wb")
+            fp1.write(TEST_COMMAND)
+            fp1.close()
+
+            commands = discover_commands(CURRENT_PATH)
+            for command in commands:
+                module = import_command(COOP_TEST_COMMAND_PATH, command)
+            self.assertEqual(DUMMY_COMMAND_1, module.__name__)
+        finally:
+            shutil.rmtree(COOP_TEST_COMMAND_PATH)
+
+
+
+class TestDiscoverCommand(unittest.TestCase):
     def setUp(self):
         # Ensure .coop directory is empty before running the tests
         try:

@@ -20,11 +20,21 @@
 #   under certain conditions;
 import glob
 import os
+import sys
 from os.path import basename
 
-from constants import COOP_COMAND_PATH
+from constants import COOP_COMMAND_PATH
+
+
+CURRENT_PATH = os.path.abspath(__file__).partition(os.path.basename((__file__)))[0]
 
 
 def discover_commands(main_path):
-    files_on_path = glob.glob(os.path.join(main_path, COOP_COMAND_PATH, "*.py"))
+    """Given path return name of files ending with .py."""
+    files_on_path = glob.glob(os.path.join(main_path, COOP_COMMAND_PATH, "*.py"))
     return map(lambda x:basename(x).split(".py")[0],files_on_path)
+
+def import_command(main_path, command_name):
+    """Import command from name."""
+    sys.path.append(main_path)
+    return __import__(command_name)
