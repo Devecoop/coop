@@ -19,6 +19,7 @@
 #   This is free software, and you are welcome to redistribute it
 #   under certain conditions;
 import os
+import shutil
 import unittest
 
 from coop.lib.command_discoverer import discover_commands
@@ -26,6 +27,20 @@ from coop.lib.constants import COOP_COMAND_PATH
 
 CURRENT_PATH = os.path.abspath(__file__).partition(__file__)[0]
 COOP_TEST_COMMAND_PATH = os.path.join(CURRENT_PATH, COOP_COMAND_PATH)
+DUMMY_COMMAND_1 = 'dummy1'
+DUMMY_COMMAND_2 = 'dummy2'
+DUMMY_COMMAND_3 = 'dummy3'
+COMMAND_EXTENSION_SUFFIX = ".py"
+
+DUMMY_COMMAND_1_PATH = os.path.join(COOP_TEST_COMMAND_PATH,
+                                    DUMMY_COMMAND_1 + COMMAND_EXTENSION_SUFFIX)
+
+DUMMY_COMMAND_2_PATH = os.path.join(COOP_TEST_COMMAND_PATH,
+                                    DUMMY_COMMAND_2 + COMMAND_EXTENSION_SUFFIX)
+
+DUMMY_COMMAND_3_PATH = os.path.join(COOP_TEST_COMMAND_PATH,
+                                    DUMMY_COMMAND_3 + COMMAND_EXTENSION_SUFFIX)
+
 
 
 class TestCommandDiscover(unittest.TestCase):
@@ -37,11 +52,34 @@ class TestCommandDiscover(unittest.TestCase):
             pass
 
     def test_given_no_files_are_present_then_return_empty_list(self):
-        os.mkdir(COOP_TEST_COMMAND_PATH)
-        expected_result = []
-        result = discover_commands(CURRENT_PATH)
-        self.assertEqual(expected_result, result)
-        os.rmdir(COOP_TEST_COMMAND_PATH)
+        try:
+            if not os.path.exists(COOP_TEST_COMMAND_PATH):
+                os.mkdir(COOP_TEST_COMMAND_PATH)
+            expected_result = []
+            result = discover_commands(CURRENT_PATH)
+            self.assertEqual(expected_result, result)
+        finally:
+            os.rmdir(COOP_TEST_COMMAND_PATH)
+
+    def test_given_files_are_present_then_return_list_with_file_names(self):
+        try:
+            if not os.path.exists(COOP_TEST_COMMAND_PATH):
+                os.mkdir(COOP_TEST_COMMAND_PATH)
+            fp1 = open(DUMMY_COMMAND_1_PATH, "wb")
+            fp1.close()
+            fp1 = open(DUMMY_COMMAND_2_PATH, "wb")
+            fp1.close()
+            fp1 = open(DUMMY_COMMAND_3_PATH, "wb")
+            fp1.close()
+
+            expected_result = [DUMMY_COMMAND_1, DUMMY_COMMAND_2,
+                               DUMMY_COMMAND_3]
+            result = discover_commands(CURRENT_PATH)
+            self.assertEqual(expected_result.sort(), result.sort())
+
+        finally:
+            shutil.rmtree(COOP_TEST_COMMAND_PATH)
+
 
 
 if __name__ == '__main__':

@@ -18,11 +18,13 @@
 #   Coop comes with ABSOLUTELY NO WARRANTY.
 #   This is free software, and you are welcome to redistribute it
 #   under certain conditions;
+import glob
 import os
+from os.path import basename
 
 from constants import COOP_COMAND_PATH
 
 
 def discover_commands(main_path):
-    files_on_path = os.listdir(os.path.join(main_path, COOP_COMAND_PATH))
-    return files_on_path
+    files_on_path = glob.glob(os.path.join(main_path, COOP_COMAND_PATH, "*.py"))
+    return map(lambda x:basename(x).split(".py")[0],files_on_path)
