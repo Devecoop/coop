@@ -28,13 +28,29 @@ from constants import COOP_COMMAND_PATH
 
 CURRENT_PATH = os.path.abspath(__file__).partition(os.path.basename((__file__)))[0]
 
+def check_dependencies(dependencies_file):
+    """Given a file with dependencies, check if they are importable."""
+    raise NotImplementedError
+
+def validate_command(command_path):
+    """Validate command integrity, check dependencies and structure."""
+    # TODO: Validate command, check dependencies
+    raise NotImplementedError
 
 def discover_commands(main_path):
-    """Given path return name of files ending with .py."""
-    files_on_path = glob.glob(os.path.join(main_path, COOP_COMMAND_PATH, "*.py"))
-    return map(lambda x:basename(x).split(".py")[0],files_on_path)
+    """Given path return name of directories of valid commands"""
+    files_on_path = glob.glob(os.path.join(main_path, COOP_COMMAND_PATH, '*'))
+    return map(basename,files_on_path)
 
 def import_command(main_path, command_name):
     """Import command from name."""
     sys.path.append(main_path)
-    return __import__(command_name)
+    try:
+        command = __import__(command_name)
+    except Exception, e:
+        pass
+    else:
+        return command
+
+def import_and_register_commands(main_path):
+    raise NotImplementedError
