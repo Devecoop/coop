@@ -21,4 +21,4 @@
 import os
 
 COOP_MAIN_PATH = '.coop'
-COOP_COMMAND_PATH = os.path.join(COOP_MAIN_PATH, 'commands')
+BASE_COMMAND_PATH = os.path.join(COOP_MAIN_PATH, 'commands')

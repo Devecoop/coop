@@ -1,0 +1,8 @@
+[Core]
+Name = upload_to_pypy
+Module = upload_to_pypy
+
+[Documentation]
+Description = Create package and upload to pypy
+Author = Juan Manuel Schillaci
+Version = 0.1
