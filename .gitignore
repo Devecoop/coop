@@ -1,7 +1,17 @@
 *.py[cod]
 
+
 # C extensions
 *.so
+
+# vim swp files
+.*.sw*
+
+# Doit files
+.doit.db
+# Rope files
+.ropeproject
+
 
 # Packages
 *.egg
