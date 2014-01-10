@@ -1,0 +1,8 @@
+[Core]
+Name = create_project
+Module = create_project
+
+[Documentation]
+Description = Create and initialize python project
+Author = Juan Manuel Schillaci
+Version = 0.1
