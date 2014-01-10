@@ -26,13 +26,13 @@ from doit.doit_cmd import DoitMain
 from doit.cmd_help import Help as DoitHelp
 from yapsy.PluginManager import PluginManager
 
-from coop.lib.constants import BASE_COMMAND_PATH
-COOP_VERSION = "0.1"
+from coop.lib.constants import DEFAULT_COMMAND_PATH, LOCAL_COMMAND_PATH, \
+    COOP_VERSION
 
 # Build the manager
 simplePluginManager = PluginManager()
 # Tell it the default place(s) where to find plugins
-simplePluginManager.setPluginPlaces([BASE_COMMAND_PATH])
+simplePluginManager.setPluginPlaces([DEFAULT_COMMAND_PATH, LOCAL_COMMAND_PATH])
 # Load all plugins
 simplePluginManager.collectPlugins()
 

@@ -20,5 +20,9 @@
 #   under certain conditions;
 import os
 
-COOP_MAIN_PATH = '.coop'
-BASE_COMMAND_PATH = os.path.join(COOP_MAIN_PATH, 'commands')
+COOP_VERSION = "0.1.1"
+LIB_PATH = os.path.dirname(os.path.abspath(__file__))
+CURR_DIR = os.getcwd()
+COOP_CONF_PATH = '.coop'
+DEFAULT_COMMAND_PATH = os.path.join(LIB_PATH, 'commands')
+LOCAL_COMMAND_PATH = os.path.join(CURR_DIR, 'commands')
