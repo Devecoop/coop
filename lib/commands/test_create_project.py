@@ -18,38 +18,11 @@
 #   Coop comes with ABSOLUTELY NO WARRANTY.
 #   This is free software, and you are welcome to redistribute it
 #   under certain conditions;
-import os
-import sys
+import unittest
 
-from yapsy.IPlugin import IPlugin
+class CreateProjectDirectoryTestCase(unittest.TestCase):
+    def test_given_non_existent_project_name_when_calling_create_project_directory_then_create_directory_and_return_true(self):
+        raise NotImplementedError
 
-
-def sanitize_name(name):
-    return name
-
-
-class Command(IPlugin):
-    params = [{'name':'Project template',
-                'long':'type',
-                'short':'t',
-                'default':'lib'},
-
-                {'name':'name',
-                'long':'name',
-                 'default':None}
-                ]
-
-    def _create_project_directory(self, project_name):
-        if not os.path.exists(project_name):
-            os.makedirs(project_name)
-            return True
-        else:
-            print "Project already exists"
-
-    def handle(self, *args, **kwargs):
-        project_name = kwargs['name']
-        sanitized_project_name = sanitize_name(project_name)
-        print "Creating new project %s ..." % sanitized_project_name
-        created = self._create_project_directory(sanitized_project_name)
-        if not created:
-            sys.exit(1)
+if __name__ == '__main__':
+    unittest.main()
