@@ -140,5 +140,5 @@ class Coop(DoitMain):
         """Print current coop version."""
         print("Coop version " + self.__version__)
 
-def main(args):
-    sys.exit(Coop(CoopTaskLoader()).run(args))
+def main():
+    sys.exit(Coop(CoopTaskLoader()).run(sys.argv[1:]))

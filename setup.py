@@ -53,7 +53,8 @@ setup(
         # -*- Required files -*-
     ],
     entry_points = {
-        # -*- Entry points -*-
+        'console_scripts':
+            ['coop = coop.main:main']
     },
     classifiers=[
         # see http://pypi.python.org/pypi?:action=list_classifiers
