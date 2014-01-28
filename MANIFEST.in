@@ -7,4 +7,6 @@ include LICENSE
 include distribute_setup.py
 include setup.py
 recursive-include docs/source *
+recursive-include coop *
+recursive-exclude coop .*.sw*
 include docs/build/empty_file
