@@ -1,0 +1,10 @@
+include MANIFEST.in
+include README
+include HISTORY
+include VERSION
+include INSTALL
+include LICENSE
+include distribute_setup.py
+include setup.py
+recursive-include docs/source *
+include docs/build/empty_file

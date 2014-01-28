@@ -1,5 +1,5 @@
 #  Coop a tool to deploy and socialize Python projects
-#   Copyright (C) 2013  Juan Manuel Schillaci
+#   Copyright (C) 2014  Juan Manuel Schillaci
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by

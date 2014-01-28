@@ -1,5 +1,5 @@
 #  Coop a tool to deploy and socialize Python projects
-#   Copyright (C) 2013  Juan Manuel Schillaci
+#   Copyright (C) 2014  Juan Manuel Schillaci
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,12 +20,35 @@
 #   under certain conditions;
 import os
 import sys
+from subprocess import Popen, PIPE, STDOUT, call
 
 from yapsy.IPlugin import IPlugin
+from skeleton import Skeleton, Var
 
 
 def sanitize_name(name):
     return name
+
+
+THIS_FILE_DIR = os.path.dirname(__file__)
+PROOJECT_TEMPLATES_DIR = os.path.join(THIS_FILE_DIR,
+                                      'project-templates')
+
+VAR_PROJECT_NAME = 'project_name'
+VAR_AUTHOR = 'author'
+VAR_AUTHOR_EMAIL = 'author_email'
+
+
+class BasicModule(Skeleton):
+    """
+    Create an empty module with its etup script and a README file.
+    """
+    src = os.path.join(PROOJECT_TEMPLATES_DIR, 'basic-module')
+    variables = [
+        Var(VAR_PROJECT_NAME),
+        Var(VAR_AUTHOR),
+        Var(VAR_AUTHOR_EMAIL),
+        ]
 
 
 class Command(IPlugin):
@@ -34,22 +57,16 @@ class Command(IPlugin):
                 'short':'t',
                 'default':'lib'},
 
-                {'name':'name',
-                'long':'name',
+                {'name':VAR_PROJECT_NAME,
+                'long': VAR_PROJECT_NAME,
                  'default':None}
                 ]
 
-    def _create_project_directory(self, project_name):
-        if not os.path.exists(project_name):
-            os.makedirs(project_name)
-            return True
-        else:
-            print "Project already exists"
-
     def handle(self, *args, **kwargs):
-        project_name = kwargs['name']
-        sanitized_project_name = sanitize_name(project_name)
-        print "Creating new project %s ..." % sanitized_project_name
-        created = self._create_project_directory(sanitized_project_name)
-        if not created:
-            sys.exit(1)
+        # TODO: First check wether we are inside a project template dir
+        import pdb;pdb.set_trace()
+        project_name = kwargs.get(VAR_PROJECT_NAME)
+        call(['mkproject', project_name])
+        #pip install coop
+        #pip install skeleton
+        #BasicModule.cmd()

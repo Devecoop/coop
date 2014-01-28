@@ -1,0 +1,62 @@
+========
+Installation
+========
+
+coop uses distribute for installation therefore it may be installed
+using:
+
+* from source on the command-line or
+* from pypi using pip or easy_install.
+
+From source
+-----------
+
+1) Download the source distribution of coop.
+2) Unzip the distribution into a directory.
+3) cd into that directory and type the following command (assuming python 
+   is in your path (on Linux systems root access may be required)
+
+   .. code-block:: sh
+
+      > python setup.py install
+
+4) coop should now be available inside you system python as
+
+   .. code-block:: py
+
+      >>> import coop
+
+From pypi
+---------
+
+1) type the following command (assuming pip 
+   is in your path (on Linux systems root access may be required)
+
+   .. code-block:: sh
+
+      > pip install coop
+
+4) coop should now be available inside you system python as
+
+   .. code-block:: py
+
+      >>> import coop
+
+
+Documentation
+-------------
+
+coop uses sphinx for its documentation. Please install spinx either
+via pip or easy_install or from your package mangement system.
+
+To use sphinx to build the documentation
+from source use the following command from the root directory of the project
+
+.. code-block:: sh
+
+   > python setup.py build_sphinx
+
+The resulting html files will be in docs/build/html
+
+
+
