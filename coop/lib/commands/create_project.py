@@ -64,7 +64,6 @@ class Command(IPlugin):
 
     def handle(self, *args, **kwargs):
         # TODO: First check wether we are inside a project template dir
-        import pdb;pdb.set_trace()
         project_name = kwargs.get(VAR_PROJECT_NAME)
         call(['mkproject', project_name])
         #pip install coop

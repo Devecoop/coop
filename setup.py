@@ -41,7 +41,15 @@ setup(
     ],
     install_requires=[
         'skeleton',
-        'virtualenvwrapper'
+        'virtualenvwrapper',
+        'Yapsy==1.10.223',
+        'argparse==1.2.1',
+        'doit==0.24.0',
+        'mock==1.0.1',
+        'nose==1.3.0',
+        'pyinotify==0.9.4',
+        'six==1.5.1',
+
         # -*- Required files -*-
     ],
     entry_points = {
