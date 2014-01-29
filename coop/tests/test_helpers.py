@@ -20,15 +20,15 @@
 #   under certain conditions;
 import unittest
 
-from coop.lib.helpers import get_cfd
-
-class GetCFDTestCase(unittest.TestCase):
-    DUMMY_FILE_PATH = '/home/user/file.py'
-
-    def test_given_correct_file_path_then_return_file_directory(self):
-        result = get_cfd()
-
-        raise NotImplementedError
-
+#from coop.lib.helpers import get_cfd
+#
+#class GetCFDTestCase(unittest.TestCase):
+#    DUMMY_FILE_PATH = '/home/user/file.py'
+#
+#    def test_given_correct_file_path_then_return_file_directory(self):
+#        result = get_cfd()
+#
+#        raise NotImplementedError
+#
 if __name__ == '__main__':
     unittest.main()

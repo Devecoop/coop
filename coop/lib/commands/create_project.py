@@ -34,6 +34,7 @@ THIS_FILE_DIR = os.path.dirname(__file__)
 PROOJECT_TEMPLATES_DIR = os.path.join(THIS_FILE_DIR,
                                       'project-templates')
 
+PROJECT_TEMPLATE_SPHINX = 'sphinx-package'
 VAR_PROJECT_NAME = 'project_name'
 VAR_AUTHOR = 'author'
 VAR_AUTHOR_EMAIL = 'author_email'
@@ -50,6 +51,14 @@ class BasicModule(Skeleton):
         Var(VAR_AUTHOR_EMAIL),
         ]
 
+def create_project(project_name, template=PROJECT_TEMPLATE_SPHINX):
+    """Giving a project name, create a project."""
+    # TODO: First check wether we are inside a project template dir
+    project_name = kwargs.get(VAR_PROJECT_NAME)
+    call(['mkproject', project_name])
+    #pip install coop
+    #pip install skeleton
+    #BasicModule.cmd()
 
 class Command(IPlugin):
     params = [{'name':'Project template',
@@ -63,9 +72,5 @@ class Command(IPlugin):
                 ]
 
     def handle(self, *args, **kwargs):
-        # TODO: First check wether we are inside a project template dir
-        project_name = kwargs.get(VAR_PROJECT_NAME)
-        call(['mkproject', project_name])
-        #pip install coop
-        #pip install skeleton
-        #BasicModule.cmd()
+        import pdb;pdb.set_trace()
+        create_project()
