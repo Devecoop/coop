@@ -51,14 +51,14 @@ class BasicModule(Skeleton):
         Var(VAR_AUTHOR_EMAIL),
         ]
 
+
 def create_project(project_name, template=PROJECT_TEMPLATE_SPHINX):
     """Giving a project name, create a project."""
     # TODO: First check wether we are inside a project template dir
-    project_name = kwargs.get(VAR_PROJECT_NAME)
     call(['mkproject', project_name])
-    #pip install coop
-    #pip install skeleton
-    #BasicModule.cmd()
+    call(['pip', 'install', 'coop'])
+    call(['pip', 'install', 'skeleton'])
+
 
 class Command(IPlugin):
     params = [{'name':'Project template',
@@ -73,4 +73,5 @@ class Command(IPlugin):
 
     def handle(self, *args, **kwargs):
         import pdb;pdb.set_trace()
+        project_name = kwargs.get(VAR_PROJECT_NAME)
         create_project()
