@@ -19,15 +19,16 @@
 #   This is free software, and you are welcome to redistribute it
 #   under certain conditions;
 import os
-import sys
-from subprocess import Popen, PIPE, STDOUT, call
 
-from yapsy.IPlugin import IPlugin
-from skeleton import Skeleton, Var
 from invewrapper.invewrapper import mkvirtualenv
+from skeleton import Skeleton, Var
+from yapsy.IPlugin import IPlugin
 
-def sanitize_name(name):
-    return name
+from coop import settings
+
+def sanitize_project_name(project_name):
+    """Return a valid python project name."""
+    return project_name
 
 
 THIS_FILE_DIR = os.path.dirname(__file__)
@@ -36,25 +37,33 @@ PROJECT_TEMPLATES_DIR = os.path.join(THIS_FILE_DIR,
 
 PROJECT_TEMPLATE_SPHINX = 'sphinx-package'
 VAR_PROJECT_NAME = 'project_name'
-VAR_AUTHOR = 'author'
-VAR_AUTHOR_EMAIL = 'author_email'
+VAR_AUTHOR = settings.SETTING_VAR_AUTHOR
+VAR_AUTHOR_EMAIL = settings.SETTING_VAR_AUTHOR_EMAIL
 
 
-class BasicModule(Skeleton):
-    """
-    Create an empty module with its setup script and a README file.
-    """
-    src = os.path.join(PROJECT_TEMPLATES_DIR, 'basic-module')
-    variables = [
-        Var(VAR_PROJECT_NAME),
-        Var(VAR_AUTHOR),
-        Var(VAR_AUTHOR_EMAIL),
-        ]
 
+def BasicModule(project_name):
+    class BasicModule(Skeleton):
+        """
+        Create an empty module with its setup script and a README file.
+        """
+        src = os.path.join(PROJECT_TEMPLATES_DIR, 'basic-module')
+        variables = [
+            Var(VAR_PROJECT_NAME, default=project_name),
+            Var(VAR_AUTHOR, default=settings.config.get(VAR_AUTHOR)),
+            Var(VAR_AUTHOR_EMAIL, default=settings.config.get(VAR_AUTHOR_EMAIL)),
+            ]
+
+    return BasicModule
 
 def create_project(project_name, template=PROJECT_TEMPLATE_SPHINX):
     """Giving a project name, create a virtualenv and a project dir from a template."""
+    s_project_name = sanitize_project_name(project_name)
+    # TODO: add coop as a dependency when is ready
     mkvirtualenv(project_name, packages=['pew', 'skeleton', 'virtualenvwrapper']) # add coop
+    BasicModule(s_project_name).cmd([s_project_name])
+    # TODO: check wich commands pew uses to set project with an existing env
+    #pew-setproject
 
 
 class Command(IPlugin):
