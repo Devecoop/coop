@@ -24,21 +24,19 @@ from coop.lib.commands.create_project import create_project
 from mock import MagicMock, patch, call
 
 
-DUMMY_PROJECT_NAME = 'dummy'
+DUMMY_PROJECT_NAME = 'dummyproj'
 
 
 class CreateProjectDirectoryTestCase(unittest.TestCase):
-    def test_given_project_name_when_calling_create_project_then_call_mkproject(self):
-        with patch('subprocess.Popen',
+    def test_given_project_name_when_calling_create_project_then_call_mkvirtualenv(self):
+        with patch('invewrapper.invewrapper.mkvirtualenv',
                    MagicMock()) as mock_manager:
 
             create_project(DUMMY_PROJECT_NAME)
-            expected_calls = [call(['mkproject', 'dummy']),
-                              call().wait(),
-                             call(['pip', 'install', 'coop']),
-                              call().wait(),
-                             call(['pip', 'install', 'skeleton']),
-                              call().wait(),
+            expected_calls = [
+                                call(DUMMY_PROJECT_NAME,
+                                     packages=['pew', 'skeleton',
+                                               'virtualenvwrapper'])
                               ]
 
             mock_manager.assert_has_calls(expected_calls)

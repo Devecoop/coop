@@ -24,14 +24,14 @@ from subprocess import Popen, PIPE, STDOUT, call
 
 from yapsy.IPlugin import IPlugin
 from skeleton import Skeleton, Var
-
+from invewrapper.invewrapper import mkvirtualenv
 
 def sanitize_name(name):
     return name
 
 
 THIS_FILE_DIR = os.path.dirname(__file__)
-PROOJECT_TEMPLATES_DIR = os.path.join(THIS_FILE_DIR,
+PROJECT_TEMPLATES_DIR = os.path.join(THIS_FILE_DIR,
                                       'project-templates')
 
 PROJECT_TEMPLATE_SPHINX = 'sphinx-package'
@@ -42,9 +42,9 @@ VAR_AUTHOR_EMAIL = 'author_email'
 
 class BasicModule(Skeleton):
     """
-    Create an empty module with its etup script and a README file.
+    Create an empty module with its setup script and a README file.
     """
-    src = os.path.join(PROOJECT_TEMPLATES_DIR, 'basic-module')
+    src = os.path.join(PROJECT_TEMPLATES_DIR, 'basic-module')
     variables = [
         Var(VAR_PROJECT_NAME),
         Var(VAR_AUTHOR),
@@ -53,11 +53,8 @@ class BasicModule(Skeleton):
 
 
 def create_project(project_name, template=PROJECT_TEMPLATE_SPHINX):
-    """Giving a project name, create a project."""
-    # TODO: First check wether we are inside a project template dir
-    call(['mkproject', project_name])
-    call(['pip', 'install', 'coop'])
-    call(['pip', 'install', 'skeleton'])
+    """Giving a project name, create a virtualenv and a project dir from a template."""
+    mkvirtualenv(project_name, packages=['pew', 'skeleton', 'virtualenvwrapper']) # add coop
 
 
 class Command(IPlugin):
@@ -72,6 +69,5 @@ class Command(IPlugin):
                 ]
 
     def handle(self, *args, **kwargs):
-        import pdb;pdb.set_trace()
         project_name = kwargs.get(VAR_PROJECT_NAME)
-        create_project()
+        create_project(project_name)

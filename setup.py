@@ -49,6 +49,7 @@ setup(
         'nose==1.3.0',
         'pyinotify==0.9.4',
         'six==1.5.1',
+        'pew==0.1.9',
 
         # -*- Required files -*-
     ],
