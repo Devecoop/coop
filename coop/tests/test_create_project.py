@@ -18,28 +18,70 @@
 #   Coop comes with ABSOLUTELY NO WARRANTY.
 #   This is free software, and you are welcome to redistribute it
 #   under certain conditions;
+import datetime
 import unittest
+from contextlib import nested
 
-from coop.lib.commands.create_project import create_project
-from mock import MagicMock, patch, call
+from coop.lib.commands.create_project import create_project, BasicModule, \
+    VAR_PROJECT_NAME, MSG_ERROR_MODULE_PROJECT_NAME_NOT_GIVEN
+from mock import MagicMock, patch
 
+from coop.settings import SETTING_VAR_AUTHOR, SETTING_VAR_AUTHOR_EMAIL
 
 DUMMY_PROJECT_NAME = 'dummyproj'
+DUMMY_SETTING_AUTHOR = 'dummyauthor'
+DUMMY_SETTING_AUTHOR_EMAIL = 'dummyauthoremail'
+
+DUMMY_SETTINGS_DICT = {SETTING_VAR_AUTHOR: DUMMY_SETTING_AUTHOR,
+                       SETTING_VAR_AUTHOR_EMAIL: DUMMY_SETTING_AUTHOR_EMAIL}
+
+# TODO: Change tests to use a BDD framework
 
 
 class CreateProjectDirectoryTestCase(unittest.TestCase):
-    def test_given_project_name_when_calling_create_project_then_call_mkvirtualenv(self):
-        with patch('invewrapper.invewrapper.mkvirtualenv',
-                   MagicMock()) as mock_manager:
+    def test_given_project_name_and_no_template_when_calling_create_project_then_call_mkvirtualenv_and_basic_module_cmd_with_project_name(self):
+        with nested(patch('coop.lib.commands.create_project.mkvirtualenv',
+                   MagicMock()),
+                    patch('coop.lib.commands.create_project.BasicModule',
+                          MagicMock())
+                          ) as (mock_mkv, mock_bmo):
 
             create_project(DUMMY_PROJECT_NAME)
-            expected_calls = [
-                                call(DUMMY_PROJECT_NAME,
-                                     packages=['pew', 'skeleton',
-                                               'virtualenvwrapper'])
-                              ]
 
-            mock_manager.assert_has_calls(expected_calls)
+            mock_mkv.assert_called_with(DUMMY_PROJECT_NAME,
+                                 packages=['pew', 'skeleton',
+                                               'virtualenvwrapper'])
+
+            mock_bmo.assert_called_with(DUMMY_PROJECT_NAME)
+
+    def test_given_no_project_name_and_no_template_when_calling_create_project_then_fail(self):
+        self.assertRaises(TypeError, create_project)
+
+
+# These scenarios assume that settings are always present
+class BasicModuleFactoryTestCase(unittest.TestCase):
+    def test_given_project_name_when_calling_BasicModule_then_return_skeleton_class_with_project_name_author_and_author_email_already_set(self):
+        with patch('coop.lib.commands.create_project.settings.config', DUMMY_SETTINGS_DICT):
+            basic_module_instance = BasicModule(DUMMY_PROJECT_NAME)()
+            current_year = datetime.datetime.now().year
+
+            expected_result_items = sorted([(SETTING_VAR_AUTHOR_EMAIL,
+                                      DUMMY_SETTING_AUTHOR_EMAIL),
+             (VAR_PROJECT_NAME, DUMMY_PROJECT_NAME),
+             (SETTING_VAR_AUTHOR, DUMMY_SETTING_AUTHOR),
+             ('year', current_year)])
+
+            self.assertEqual(expected_result_items,
+                             sorted(basic_module_instance.items()))
+
+
+    def test_given_no_project_name_when_calling_BasicModule_then_raise_ValueError(self):
+
+        with self.assertRaises(ValueError) as cm:
+            BasicModule()
+
+        expected_message = MSG_ERROR_MODULE_PROJECT_NAME_NOT_GIVEN
+        self.assertEqual(expected_message, cm.exception.message)
 
 if __name__ == '__main__':
     unittest.main()

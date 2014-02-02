@@ -40,9 +40,12 @@ VAR_PROJECT_NAME = 'project_name'
 VAR_AUTHOR = settings.SETTING_VAR_AUTHOR
 VAR_AUTHOR_EMAIL = settings.SETTING_VAR_AUTHOR_EMAIL
 
+MSG_ERROR_MODULE_PROJECT_NAME_NOT_GIVEN = """Project name not given, you must provide a project name."""
 
+def BasicModule(project_name=None):
+    if project_name is None:
+        raise ValueError(MSG_ERROR_MODULE_PROJECT_NAME_NOT_GIVEN)
 
-def BasicModule(project_name):
     class BasicModule(Skeleton):
         """
         Create an empty module with its setup script and a README file.
